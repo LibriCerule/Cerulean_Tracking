@@ -5,4 +5,4 @@ if [ $# != 1 ]; then
   exit 1
 fi
 
-python hello.py $1
+python web.py $1
