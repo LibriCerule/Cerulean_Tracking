@@ -4,3 +4,8 @@ body {
 body.modal-open, .modal-open .navbar-fixed-top, .modal-open .navbar-fixed-bottom {
     margin-right: 0;
 }
+
+div.searchbox {
+    padding-left: 20px;
+    padding-right: 20px;
+}
