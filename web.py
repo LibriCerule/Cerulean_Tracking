@@ -42,7 +42,7 @@ def index():
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python hello.py [IP address]")
+        print("Usage: python web.py [IP address]")
         exit(1)
 
     app.run(host=sys.argv[1])
