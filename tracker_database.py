@@ -58,8 +58,8 @@ class TrackerDatabase(object):
             elif str(delivered) == "False":
                 delivered = 0
             else:
-                #: TODO: Write an exception to throw here
-                pass
+                raise ValueError("Delivered must be True or False")
+
             self.curs.execute("update Packages set delivered=? where uuid=?", (delivered, uuid))
 
         elif len(args) == 3:
@@ -72,15 +72,21 @@ class TrackerDatabase(object):
         self.connection.commit()
 
     def track_new_package(self, name, uuid, lat, lon):
+        """ Adds a new package to the database 
+
+        :param name: Destination address of the package
+        :param uuid: Package uuid
+        :param lat: Latitude of the package
+        :param lon: Longitude of the package
         """
-        """
+
 
         self.curs.execute("insert into Packages values (?,?,?,?,?)", (uuid, name, lat, lon,  0))
         self.connection.commit()
 
     def get_package(self, uuid):
         """ 
-        :return: Tuple in the format: (uuid, name, lat, lon, delivered)
+        :return: Tuple in the format of (uuid, name, lat, lon, delivered)
         """
 
         self.curs.execute("select * from Packages where uuid = ?", (uuid,))
@@ -88,6 +94,8 @@ class TrackerDatabase(object):
 
     def get_package_updates(self, uuid):
         """
+
+        :return: 
         """
 
         self.curs.execute("select * from Updates where uuid = ?", (uuid,))
