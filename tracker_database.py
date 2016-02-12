@@ -1,24 +1,51 @@
-import sqlite3
-import time
+"""
+    tracker_database.py
+    ~~~~~~~~~~~~~~~~~~~
+    Class to control the SQLite Database that stores packages and their updates.
 
-class TrackerDatabase(object):
-    """
-        DB Scheme is as follows:
-          Packages Table:
-          _____________________________________________________________________
-          | UUID | Destination | Latitude | Longitude | Timestamp | Delivered |
-          ---------------------------------------------------------------------
+    The database scheme is as follows:
+
+        Packages Table:
+          ______________________________________________________________
+          | UUID | Name | Latitude | Longitude | Timestamp | Delivered |
+          --------------------------------------------------------------
+
           UUID - Unique tracking ID per-package
-          Destination - Address of the destination
+          Name - Arbitrary name for the package
           Latitude - The latitude of the destination
           Longitude - The longitude of the destination
           Timestamp - Starting time of the package
           Delivered - Integer value of 1 if the package has been delivered already, 
                       otherwise 0
         
+        Updates Table:
+          ___________________________________________
+          | UUID | Latitude | Longitude | Timestamp |
+          -------------------------------------------
 
-    """
+          UUID - Unique tracking ID per-package
+          Name - Arbitrary name for the package
+          Latitude - The latitude of the package
+          Longitude - The longitude of the package
+          Timestamp - Starting time of the package
 
+
+    Example usage of the class:
+
+        trackerdb = TrackerDatabase("/path/to/directory")
+
+        # Create new package
+        trackerdb.track_new_package("Arizona Iced Tea", "de305d54-75b4-431b-adb2-eb6b9e546014", 38.880513, -77.113585)
+
+        # 
+        a
+
+"""
+
+import sqlite3
+import time
+
+class TrackerDatabase(object):
     def __init__(self, directory):
         """ Creates the databases if it doesn't already exist and establishes 
         connection.
@@ -74,7 +101,7 @@ class TrackerDatabase(object):
     def track_new_package(self, name, uuid, lat, lon):
         """ Adds a new package to the database 
 
-        :param name: Destination address of the package
+        :param name: Arbitrary name for the package
         :param uuid: Package uuid
         :param lat: Latitude of the package
         :param lon: Longitude of the package
