@@ -40,40 +40,55 @@ class TrackerDatabase(object):
             Delivery status update
             Location update
 
-        :param uuid: 
         Delivery status update
+            :param uuid: Package uuid
             :param delivered: boolean dictates the delivery status
 
         Location Update
-            :param lat: a
-            :param long:
-            :param time: Given timestamp 
-        
+            :param uuid: Package uuid
+            :param lat: Latitude of the package
+            :param lon: Longitude of the package
+            :param time: Timestamp from the event
         """
+
         if len(args) == 1:
             delivered = args[0]
-            self.curs.execute("update Packages set delivered=? where uuid=?", delivered, uuid)
-        elif len(args) == 4:
+            if str(delivered) == "True":
+                delivered = 1
+            elif str(delivered) == "False":
+                delivered = 0
+            else:
+                #: TODO: Write an exception to throw here
+                pass
+            self.curs.execute("update Packages set delivered=? where uuid=?", (delivered, uuid))
+
+        elif len(args) == 3:
+            #: TODO: Write input validation here too
             lat = args[0]
             lon = args[1]
             time = args[2]
             self.curs.execute("insert into Updates values (?,?,?,?)", (uuid, lat, lon, time))
+
         self.connection.commit()
 
     def track_new_package(self, name, uuid, lat, lon):
         """
         """
+
         self.curs.execute("insert into Packages values (?,?,?,?,?)", (uuid, name, lat, lon,  0))
         self.connection.commit()
 
     def get_package(self, uuid):
+        """ 
+        :return: Tuple in the format: (uuid, name, lat, lon, delivered)
         """
-        """
-        self.curs.execute("select * from Packages where uuid = ?", uuid)
+
+        self.curs.execute("select * from Packages where uuid = ?", (uuid,))
         return self.curs.fetchone()
 
     def get_package_updates(self, uuid):
         """
         """
-        self.curs.execute("select * from Updates where uuid = ?", uuid)
-        return self.curs.fetchone()
+
+        self.curs.execute("select * from Updates where uuid = ?", (uuid,))
+        return self.curs.fetchall()
