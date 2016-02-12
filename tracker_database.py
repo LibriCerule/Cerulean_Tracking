@@ -19,32 +19,61 @@ class TrackerDatabase(object):
 
     """
 
-    def __init__(self):
+    def __init__(self, directory):
+        """ Creates the databases if it doesn't already exist and establishes 
+        connection.
+
+        :param directory: Directory to store the sqlite database
         """
-            Performs first-time setup of the database if it doesn't already exist
-        """
-        self.connection = sqlite3.connect("package.db")
+
+        self.connection = sqlite3.connect(directory)
         self.curs = self.connection.cursor()
 
         self.curs.execute("create table if not exists Packages (uuid varchar(60), destination varchar(255), latitude real, longitude real, delivered integer)")
         self.curs.execute("create table if not exists Updates (uuid varchar(60), latitude real, longitude real, timestamp varchar(255))")
 
-    def package_track_update(self, uuid, delivered=None, lat=None, lon=None, ele=None, time=None):
-        if delivered == None:
-            self.curs.execute("insert into Updates values (?,?,?,?)", (uuid, lat, lon, time))
-        else:
-            self.curs.execute("update Packages set delivered=? where uuid=?", delivered, uuid)
+    def package_track_update(self, uuid, *args):
+        """ Creates a new entry in the package tracker updates table. There is 
+        no true function overloading in python, so this is our workaround.
 
+        There are two packge track modes:
+            Delivery status update
+            Location update
+
+        :param uuid: 
+        Delivery status update
+            :param delivered: boolean dictates the delivery status
+
+        Location Update
+            :param lat: a
+            :param long:
+            :param time: Given timestamp 
+        
+        """
+        if len(args) == 1:
+            delivered = args[0]
+            self.curs.execute("update Packages set delivered=? where uuid=?", delivered, uuid)
+        elif len(args) == 4:
+            lat = args[0]
+            lon = args[1]
+            time = args[2]
+            self.curs.execute("insert into Updates values (?,?,?,?)", (uuid, lat, lon, time))
         self.connection.commit()
 
     def track_new_package(self, name, uuid, lat, lon):
+        """
+        """
         self.curs.execute("insert into Packages values (?,?,?,?,?)", (uuid, name, lat, lon,  0))
         self.connection.commit()
 
     def get_package(self, uuid):
+        """
+        """
         self.curs.execute("select * from Packages where uuid = ?", uuid)
         return self.curs.fetchone()
 
     def get_package_updates(self, uuid):
+        """
+        """
         self.curs.execute("select * from Updates where uuid = ?", uuid)
         return self.curs.fetchone()
