@@ -4,7 +4,7 @@ from flask import render_template
 from flask import request
 import sys
 
-from tracker_database.py import TrackerDatabase
+from tracker_database import TrackerDatabase
 
 app = Flask(__name__)
 #app.debug=True
