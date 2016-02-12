@@ -23,7 +23,6 @@ class TrackerDatabase(object):
         """
             Performs first-time setup of the database if it doesn't already exist
         """
-
         self.connection = sqlite3.connect("package.db")
         self.curs = self.connection.cursor()
 
@@ -31,7 +30,11 @@ class TrackerDatabase(object):
         self.curs.execute("create table if not exists Updates (uuid varchar(60), latitude real, longitude real, timestamp varchar(255))")
 
     def package_track_update(self, uuid, delivered=None, lat=None, lon=None, ele=None, time=None):
-        self.curs.execute("insert into Updates values (?,?,?,?)", (uuid, lat, lon, time))
+        if delivered == None:
+            self.curs.execute("insert into Updates values (?,?,?,?)", (uuid, lat, lon, time))
+        else:
+            self.curs.execute("update Packages set delivered=? where uuid=?", delivered, uuid)
+
         self.connection.commit()
 
     def track_new_package(self, name, uuid, lat, lon):
