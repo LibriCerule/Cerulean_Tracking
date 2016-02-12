@@ -38,7 +38,7 @@ def package_track_update(uuid):
 
     database.track_new_package(uuid, delivered, lat, lon, ele, time)
 
-    return "PLACEHOLDER"
+    return "Created", 201
 
 @app.route("/tracknewpackage", methods=['GET'])
 def track_new_package():
