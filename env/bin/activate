@@ -38,6 +38,7 @@ deactivate () {
 
 # unset irrelevant variables
 deactivate nondestructive
+PWD="/home/libri/PHS/Extra/IDT/idt-2016"
 
 VIRTUAL_ENV="$PWD/env"
 export VIRTUAL_ENV

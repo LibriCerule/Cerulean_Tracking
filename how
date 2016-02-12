@@ -1,0 +1,78 @@
+[33mcommit 690bd7d9de2772c7421cfab3d52e9cc81d2d89e5[m
+Author: Jonathan Ni <jrni4072@startctf.com>
+Date:   Tue Feb 9 21:38:09 2016 -0500
+
+    Fix web.py Error Message
+
+[33mcommit 18e3ece525b88d2d75dfb8809646596b79296875[m
+Merge: c3a1782 0e91c9f
+Author: Jonathan Ni <jrni4072@startctf.com>
+Date:   Tue Feb 9 21:37:18 2016 -0500
+
+    Merge branch 'master' of https://bitbucket.org/tnek/idt-2016
+
+[33mcommit c3a1782b566ba371563baf2ac17b85ee34ebbcc5[m
+Author: Jonathan Ni <jrni4072@startctf.com>
+Date:   Tue Feb 9 20:06:50 2016 -0500
+
+    Registration and Login Modals
+
+[33mcommit 0e91c9f5bef5ecc6266cceeea83355a7a90828d2[m
+Author: Kent Ma <tnekent@gmail.com>
+Date:   Tue Feb 9 17:29:28 2016 -0500
+
+    partially implemented api
+
+[33mcommit 3b71b2594849b2dad8712f7fc0bfc708d0cbb049[m
+Author: Jonathan Ni <jrni4072@startctf.com>
+Date:   Sun Feb 7 16:40:42 2016 -0500
+
+    Fix Search Box
+
+[33mcommit a973aa9692b2bd475b822e72397319e21cb48a1b[m
+Author: Jonathan Ni <jrni4072@startctf.com>
+Date:   Sun Feb 7 11:28:28 2016 -0500
+
+    Fix index.html Display for Small Devices
+
+[33mcommit 28f4093223d8259cd1b1f43d16514cba403a00fb[m
+Author: Jonathan Ni <jrni4072@startctf.com>
+Date:   Sat Feb 6 23:09:20 2016 -0500
+
+    Fix Navbar
+
+[33mcommit 569a2db3fa9b1fdf114722b5d691b7e41af43556[m
+Author: Jonathan Ni <jrni4072@startctf.com>
+Date:   Sat Feb 6 23:07:23 2016 -0500
+
+    Non-functional Style Mockup of Index Page
+
+[33mcommit ea52feaafc64d62f547355f6be228377d9c1ed5b[m
+Author: Jonathan Ni <jrni4072@startctf.com>
+Date:   Sat Feb 6 21:14:33 2016 -0500
+
+    Simple Bootstrap Template
+
+[33mcommit 35ade72370edc75209ab10a0690fb7db8d0279bb[m
+Author: Jonathan Ni <jrni4072@startctf.com>
+Date:   Sat Feb 6 20:53:35 2016 -0500
+
+    Make It Easier to Run Server Locally/Remotely
+
+[33mcommit 0787a3bd70ac508659b6247b99928cd186557b40[m
+Author: Jonathan Ni <jrni4072@startctf.com>
+Date:   Sat Feb 6 20:43:55 2016 -0500
+
+    Much Better Way to . env/bin/activate
+
+[33mcommit 872240010c2b08ed24275eb28a0c15a7f84bfa5c[m
+Author: Kent Ma <tnekent@gmail.com>
+Date:   Sun Jan 10 12:25:45 2016 -0500
+
+    Simple README for development purposes
+
+[33mcommit 00f7fbbdcb903259b627fed944dc7464097ec9ae[m
+Author: Kent Ma <tnekent@gmail.com>
+Date:   Sun Jan 10 12:22:24 2016 -0500
+
+    Initial commit with basic project setup
