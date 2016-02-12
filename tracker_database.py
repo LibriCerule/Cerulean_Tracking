@@ -2,6 +2,8 @@
     tracker_database.py
     ~~~~~~~~~~~~~~~~~~~
     Class to control the SQLite Database that stores packages and their updates.
+    With a "real world" application, we would sanitize all inputs and require 
+    authentication to access this database.
 
     The database scheme is as follows:
 
@@ -90,7 +92,6 @@ class TrackerDatabase(object):
             self.curs.execute("update Packages set delivered=? where uuid=?", (delivered, uuid))
 
         elif len(args) == 3:
-            #: TODO: Write input validation here too
             lat = args[0]
             lon = args[1]
             time = args[2]
@@ -121,6 +122,8 @@ class TrackerDatabase(object):
 
     def get_package_updates(self, uuid):
         """
+
+        :param uuid: Package uuid
 
         :return: 
         """
