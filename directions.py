@@ -1,13 +1,14 @@
 #!/usr/bin/python
 import googlemaps
-#api_key = "AIzaSyBhOIJ_Ta2QrnO2jllAy4sd5dGCzUOA4Hw"
 
 class Directions(object):
     """
 
     """
-    api_key = "AIzaSyBhOIJ_Ta2QrnO2jllAy4sd5dGCzUOA4Hw"
-    def __init__(self):
+    def __init__(self, filename):
+        with open(filename, 'r') as f:
+            self.api_key = f.read()
+            f.close()
         self.gmaps = googlemaps.Client(self.api_key)
         pass
 
