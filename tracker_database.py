@@ -1,4 +1,6 @@
 import sqlite3
+import time
+
 class TrackerDatabase(object):
     """
         DB Scheme is as follows:
@@ -23,18 +25,19 @@ class TrackerDatabase(object):
         """
 
         self.connection = sqlite3.connect("package.db")
-        self.curs = connection.cursor()
+        self.curs = self.connection.cursor()
 
-        self.curs.execute("create table if not exists Packages (uuid varchar(60), destination varchar(255), latitude real, longitude real, timestamp integer, delivered integer)")
-        self.curs.execute("create table if not exists Updates (uuid varchar(60), latitude, longitude, timestamp)")
+        self.curs.execute("create table if not exists Packages (uuid varchar(60), destination varchar(255), latitude real, longitude real, timestamp varchar(255), delivered integer)")
+        self.curs.execute("create table if not exists Updates (uuid varchar(60), latitude real, longitude real, timestamp varchar(255)")
 
-    def package_track_update(uuid, delivered=None, lat=None, lon=None, ele=None, time=None):
+    def package_track_update(self, uuid, delivered=None, lat=None, lon=None, ele=None, time=None):
+        self.curs.execute("insert into Updates values (?,?,?,?)", (uuid, lat, lon, time))
+        self.connection.commit()
+
+    def track_new_package(self, name, uuid, lat, lon):
+        time = "" #: TODO, generate timestamp
+        self.curs.execute("insert into Packages values (?,?,?,?,?,?)", (uuid, name, lat, lon, time, 0))
+        self.connection.commit()
+
+    def get_package(self, uuid):
         pass
-
-    def track_new_package(name, uuid, lat, lon):
-        pass
-
-    def get_package(uuid):
-        pass
-
-
