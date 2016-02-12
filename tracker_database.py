@@ -28,7 +28,7 @@ class TrackerDatabase(object):
         self.curs = self.connection.cursor()
 
         self.curs.execute("create table if not exists Packages (uuid varchar(60), destination varchar(255), latitude real, longitude real, delivered integer)")
-        self.curs.execute("create table if not exists Updates (uuid varchar(60), latitude real, longitude real, timestamp varchar(255)")
+        self.curs.execute("create table if not exists Updates (uuid varchar(60), latitude real, longitude real, timestamp varchar(255))")
 
     def package_track_update(self, uuid, delivered=None, lat=None, lon=None, ele=None, time=None):
         self.curs.execute("insert into Updates values (?,?,?,?)", (uuid, lat, lon, time))
@@ -39,4 +39,9 @@ class TrackerDatabase(object):
         self.connection.commit()
 
     def get_package(self, uuid):
-        pass
+        self.curs.execute("select * from Packages where uuid = ?", uuid)
+        return self.curs.fetchone()
+
+    def get_package_updates(self, uuid):
+        self.curs.execute("select * from Updates where uuid = ?", uuid)
+        return self.curs.fetchone()
