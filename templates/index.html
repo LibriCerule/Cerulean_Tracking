@@ -51,7 +51,7 @@
             <div class="row vspacer"></div>
             <div class="row">
                 <div class="input-group col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-                    <input type="text" class="form-control input-lg" placeholder="Search by comma separated list of package ID...">
+                    <input type="search" name="search" class="form-control input-lg" placeholder="Search by comma separated list of package ID...">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-info btn-lg">
                             <span class="glyphicon glyphicon-search"></span>
@@ -71,7 +71,23 @@
                     <h4 class="modal-title" id="regModalLabel">Create New Account</h4>
                 </div>
                 <div class="modal-body">
-                    Lorem Ipsum Stuff...
+                    <form data-toggle="validator" role="form" name="regForm" id="regForm">
+                        <fieldset class="form-group">
+                            <label for="regUser">Username</label>
+                            <input type="text" name="regUser" id="regUser" class="form-control input-md" placeholder="New username" pattern="[a-zA-Z0-9._]{8,20}" required>
+                            <span class="help-block">Alphanumeric, dot, underscore. 8-20 characters.</span>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="regPass1">Password</label>
+                            <input type="password" name="regPass1" id="regPass1" class="form-control input-md" placeholder="New password" pattern="[a-zA-Z0-9._]{6,20}" required>
+                            <span class="help-block">Alphanumeric, dot, underscore. 6-20 characters.</span>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="regPass2">Password Again</label>
+                            <input type="password" name="regPass2" id="regPass2" class="form-control input-md" placeholder="New password again" pattern="[a-zA-Z0-9._]{6,20}" required>
+                            <span class="help-block">Alphanumeric, dot, underscore. 6-20 characters.</span>
+                        </fieldset>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -90,7 +106,16 @@
                     <h4 class="modal-title" id="loginModalLabel">Log in</h4>
                 </div>
                 <div class="modal-body">
-                    Lorem Ipsum Stuff...
+                    <form data-toggle="validator" role="form" name="loginForm" id="loginForm">
+                        <fieldset class="form-group">
+                            <label for="loginUser">Username</label>
+                            <input type="text" name="loginUser" id="loginUser" class="form-control input-lg" placeholder="Username" required>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="loginPass">Password</label>
+                            <input type="password" name="loginPass" id="loginPass" class="form-control input-lg" placeholder="Password" required>
+                        </fieldset>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -103,5 +128,6 @@
     <script src="/static/jquery/js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/validator/js/validator.min.js"></script>
 </body>
 </html>
