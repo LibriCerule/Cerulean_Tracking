@@ -1,9 +1,10 @@
 """
     tracker_database.py
     ~~~~~~~~~~~~~~~~~~~
-    Class to control the SQLite Database that stores packages and their updates.
     With a "real world" application, we would sanitize all inputs and require 
-    authentication to access this database.
+    authentication to access any of these databases.
+
+    Class to control the SQLite Database that stores packages and their updates.
 
     The database scheme is as follows:
 
@@ -40,7 +41,7 @@
         trackerdb.track_new_package("Arizona Iced Tea", "de305d54-75b4-431b-adb2-eb6b9e546014", 38.880513, -77.113585)
 
         # 
-        a
+        print(trackerdb.get_package("de305d54-75b4-431b-adb2-eb6b9e546014"))
 
 """
 
@@ -84,6 +85,7 @@ class TrackerDatabase(object):
             delivered = args[0]
             if str(delivered) == "True":
                 delivered = 1
+                self.curs.execute("delete from Updates where uuid = ?", (uuid,))
             elif str(delivered) == "False":
                 delivered = 0
             else:

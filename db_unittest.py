@@ -1,7 +1,7 @@
 from tracker_database import TrackerDatabase 
 def test_track_new_package(test_name, test_uuid, test_lat, test_lon, test_time):
     testdb = TrackerDatabase("unittest.db")
-#    testdb.track_new_package(test_name, test_uuid, test_lat, test_lon)
+    testdb.track_new_package(test_name, test_uuid, test_lat, test_lon)
     testdb.package_track_update(test_uuid, True)
     testdb.package_track_update(test_uuid, test_lat, test_lon, test_time)
 
@@ -20,7 +20,7 @@ def main():
     test_delivered = False
     test_time = "2015-12-08T08:42:33.188-25:00"
 
-    test_track_new_package(test_uuid, test_lat + 1, test_lon + 1, test_time)
+    test_track_new_package(test_name, test_uuid, test_lat + 1, test_lon + 1, test_time)
 
 if __name__ == "__main__":
     main()
