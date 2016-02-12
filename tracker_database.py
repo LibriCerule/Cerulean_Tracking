@@ -27,7 +27,7 @@ class TrackerDatabase(object):
         self.connection = sqlite3.connect("package.db")
         self.curs = self.connection.cursor()
 
-        self.curs.execute("create table if not exists Packages (uuid varchar(60), destination varchar(255), latitude real, longitude real, timestamp varchar(255), delivered integer)")
+        self.curs.execute("create table if not exists Packages (uuid varchar(60), destination varchar(255), latitude real, longitude real, delivered integer)")
         self.curs.execute("create table if not exists Updates (uuid varchar(60), latitude real, longitude real, timestamp varchar(255)")
 
     def package_track_update(self, uuid, delivered=None, lat=None, lon=None, ele=None, time=None):
@@ -35,8 +35,7 @@ class TrackerDatabase(object):
         self.connection.commit()
 
     def track_new_package(self, name, uuid, lat, lon):
-        time = "" #: TODO, generate timestamp
-        self.curs.execute("insert into Packages values (?,?,?,?,?,?)", (uuid, name, lat, lon, time, 0))
+        self.curs.execute("insert into Packages values (?,?,?,?,?)", (uuid, name, lat, lon,  0))
         self.connection.commit()
 
     def get_package(self, uuid):
