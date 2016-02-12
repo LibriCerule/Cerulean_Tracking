@@ -1,3 +1,8 @@
+html, body {
+    height: 100%;
+    min-height: 100%;
+}
+
 .right {
     display: inline-block;
     float: right;
@@ -15,8 +20,27 @@
     margin: auto;
 }
 
+.hfill {
+    width: 100%;
+}
+
+.vfill {
+    height: 100%;
+    min-height: 100%;
+}
+
 div.vspacer {
     margin-top: 20px;
+}
+
+div.cell {
+    padding: 10px;
+}
+
+div.bare {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
 }
 
 .shrinkwrap {
