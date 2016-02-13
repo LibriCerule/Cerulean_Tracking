@@ -8,7 +8,7 @@ from flask import request
 from tracker_database import TrackerDatabase
 
 app = Flask(__name__)
-app.debug=True
+#app.debug=True
 #app.run(host='0.0.0.0')
 database = TrackerDatabase("package.db")
 
