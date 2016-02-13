@@ -6,11 +6,23 @@ from flask import render_template
 from flask import request
 
 from tracker_database import TrackerDatabase
+#from directions import Directions
 
 app = Flask(__name__)
-#app.debug=True
+app.debug=True
 #app.run(host='0.0.0.0')
 database = TrackerDatabase("package.db")
+#directions = Directions("gmapskey")
+
+#@app.route("/calculatedistancetime", methods=['GET'])
+#def calculate_distance_time():
+#    pass
+
+@app.route("/getpackageofuser", methods=['GET'])
+def get_package_of_user():
+    username = request.args.get('username')
+    packages = database.get_package_of_user(username)
+    return "{" + ",".join(content[0] for content in packages) + "}"
 
 @app.route("/package", methods=['GET'])
 def package_get():
