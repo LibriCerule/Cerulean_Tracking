@@ -218,8 +218,3 @@ class TrackerDatabase(object):
                 self.cursor.execute("select * from Packages where ROWID=?",(rowid,))
                 packages.append(self.cursor.fetchone())
             return packages
-
-
-
-
-
