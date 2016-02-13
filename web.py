@@ -6,7 +6,7 @@ from flask import render_template
 from flask import request
 
 from tracker_database import TrackerDatabase
-#from directions import Directions
+from directions import Directions
 
 app = Flask(__name__)
 #app.debug=True
