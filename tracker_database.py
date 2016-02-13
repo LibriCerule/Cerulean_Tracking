@@ -137,21 +137,31 @@ class TrackerDatabase(object):
     def register_user(self, username, password_hash):
         """
         """
-        self.cursor.execute("insert into Users values (?,?,?,?)", (username, password_hash, " ", 0))
+        self.cursor.execute("insert or ignore into Users values (?,?,?,?)", (username, password_hash, " ", 0))
+        self.connection.commit()
 
     def log_in(self, username, password_hash):
         self.cursor.execute("select * from Users where username=? and password_hash=?", (username,password_hash))
         return len(self.cursor.fetchall()) == 1
 
     def register_package_to_user(self, username, uuid):
-        self.cursor.execute("select ROWID from Packages where uuid=?" (uuid,))
-        new_row_id = self.cursor.fetchone()
+        self.cursor.execute("select ROWID from Packages where uuid=?", (uuid,))
+        new_row_id = int(self.cursor.fetchone()[0])
 
         # SQLite doesn't have real lists, so we're using makeshift lists
-        self.cursor.execute("select registered_packages from Users where username=?", (username,))
-        old_registered_packages = self.cursor.fetchone()
-        if old_registered_packages == " ":
-            old_registered_packages = new_row_id
-        else:
-            old_registered_packages += "," + new_row_id
+        self.cursor.execute("select registered_packages, num_packages from Users where username=?", (username,))
+        query = self.cursor.fetchone()
+        registered_packages = query[0]
+        num_packages = int(query[1])
 
+        if registered_packages == " ":  # User has no registered packages
+            registered_packages = new_row_id
+            num_packages += 1
+        else:
+            # FIXME: May want to throw an exception if it tries to add a duplicate package
+            if not str(new_row_id) in registered_packages.split(","):
+                registered_packages += "," + str(new_row_id)
+                num_packages += 1
+
+        self.cursor.execute("update Users set num_packages=?, registered_packages=? where username=?", (num_packages, registered_packages, username))
+        self.connection.commit()
