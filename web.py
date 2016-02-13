@@ -1,8 +1,11 @@
 #!/usr/bin/python
+import sys
+import hashlib
+import json
+
 from flask import Flask
 from flask import render_template
 from flask import request
-import sys
 
 from tracker_database import TrackerDatabase
 
@@ -13,12 +16,12 @@ database = TrackerDatabase("package.db")
 
 @app.route("/package", methods=['GET'])
 def package_get():
-
     uuid = request.values.getlist('uuid')
     if (len(uuid) <= 0):
-        return "PLACEHOLDER"
+        return 400
+    package = database.get_package(uuid)
+    return "{\"uuid\":%s, \"name\":%s, \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package)
 
-    return str(uuid)
 
 @app.route("/packagetrackupdate/<uuid>", methods=['POST'])
 def package_track_update(uuid):
@@ -50,6 +53,15 @@ def track_new_package():
 
     database.track_new_package(name, uuid, latitude, longitude)
     return "{\"ackUUID\":\"%s\"" %(name)
+
+@app.route("/register", methods=['POST'])
+def register():
+    username = request.form['username']
+    password_hash = hashlib.sha512(request.form['password'].encode('utf-8')).hexdigest()
+
+@app.route("/login", methods=['POST'])
+def login():
+    request.form
 
 @app.route("/")
 def index():
