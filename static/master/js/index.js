@@ -92,7 +92,19 @@ $(document).ready(function() {
         $('#sideNavHeader').children()[0].remove();
         itemNavHeader();
         $('#sidebar').children()[0].remove();
+
+        $.getJSON("/package").error(function(xhr) {
+            var data = $.parseJSON(xhr.responseText);
+            var items = [];
+            var lat = 0;
+            var long = 0;
+            $.each( data, function( key, val ) {
+                if(key=='lat') lat=val;
+                if(key=='lon') lon=val;
+            });
+        });
     });
 
+    $(".map").html('<iframe class="hfill vfill bare" frameborder="0" src="https://maps.google.com/maps?q='+lat+','+long+'&hl=es;z=14&amp;output=embed"></iframe>');
     loadList(['de305d54-75b4-431b-adb2-eb6b9e546010']);
 });
