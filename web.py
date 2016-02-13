@@ -1,7 +1,5 @@
 #!/usr/bin/python
 import sys
-import hashlib
-import json
 
 from flask import Flask
 from flask import render_template
@@ -17,10 +15,18 @@ database = TrackerDatabase("package.db")
 @app.route("/package", methods=['GET'])
 def package_get():
     uuid = request.values.getlist('uuid')
-    if (len(uuid) <= 0):
-        return 400
     package = database.get_package(uuid)
     return "{\"uuid\":%s, \"name\":%s, \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package)
+
+@app.route("/getpackageupdates", method=['GET'])
+def get_package_updates():
+    uuid = request.values.getlist('uuid')
+    package = database.get_package_updates(uuid)
+    json_out = "{"
+    json_out += ",".join("{\"uuid\":%s, \"lat\":%s, \"lon\":%s, \"timestamp\":%s}" %(update[0], update[1], update[2], update[3]) for update in package)
+    json_out += "}"
+    return json_out
+
 
 @app.route("/registerpackagetouser", methods=['POST'])
 def register_package_to_user():
