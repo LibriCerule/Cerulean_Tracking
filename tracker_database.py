@@ -69,7 +69,7 @@ class TrackerDatabase(object):
         :param directory: Directory to store the sqlite database
         """
 
-        self.connection = sqlite3.connect(directory)
+        self.connection = sqlite3.connect(directory, check_same_thread=False)
         self.cursor = self.connection.cursor()
 
         self.cursor.execute("create table if not exists Users (username varchar(255), password_hash varchar(255), registered_packages varchar(255), num_packages int, UNIQUE(username))")

@@ -8,19 +8,19 @@ from flask import request
 from tracker_database import TrackerDatabase
 
 app = Flask(__name__)
-#app.debug=True
+app.debug=True
 #app.run(host='0.0.0.0')
 database = TrackerDatabase("package.db")
 
 @app.route("/package", methods=['GET'])
 def package_get():
-    uuid = request.values.getlist('uuid')
+    uuid = request.args.get('uuid')
     package = database.get_package(uuid)
-    return "{\"uuid\":%s, \"name\":%s, \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package)
+    return "<html>{\"uuid\":%s, \"name\":%s, \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package[0], package[1], package[2], package[3], package[4])
 
 @app.route("/getpackageupdates", methods=['GET'])
 def get_package_updates():
-    uuid = request.values.getlist('uuid')
+    uuid = request.args.get('uuid')
     package = database.get_package_updates(uuid)
     json_out = "{"
     json_out += ",".join("{\"uuid\":%s, \"lat\":%s, \"lon\":%s, \"timestamp\":%s}" %(update[0], update[1], update[2], update[3]) for update in package)
