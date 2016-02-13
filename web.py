@@ -1,7 +1,5 @@
 #!/usr/bin/python
 import sys
-import hashlib
-import json
 
 from flask import Flask
 from flask import render_template
@@ -16,11 +14,19 @@ database = TrackerDatabase("package.db")
 
 @app.route("/package", methods=['GET'])
 def package_get():
-    uuid = request.values.getlist('uuid')
-    if (len(uuid) <= 0):
-        return 400
+    uuid = request.args.get('uuid')
     package = database.get_package(uuid)
-    return "{\"uuid\":%s, \"name\":%s, \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package)
+    return "<html>{\"uuid\":%s, \"name\":%s, \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package[0], package[1], package[2], package[3], package[4])
+
+@app.route("/getpackageupdates", methods=['GET'])
+def get_package_updates():
+    uuid = request.args.get('uuid')
+    package = database.get_package_updates(uuid)
+    json_out = "{"
+    json_out += ",".join("{\"uuid\":%s, \"lat\":%s, \"lon\":%s, \"timestamp\":%s}" %(update[0], update[1], update[2], update[3]) for update in package)
+    json_out += "}"
+    return json_out
+
 
 @app.route("/registerpackagetouser", methods=['POST'])
 def register_package_to_user():
@@ -58,16 +64,26 @@ def track_new_package():
     longitude = request.args.get('destinationLon')
 
     database.track_new_package(name, uuid, latitude, longitude)
-    return "{\"ackUUID\":\"%s\"" %(name)
+    return "{\"ackUUID\":\"%s\"}" %(name)
 
 @app.route("/register", methods=['POST'])
 def register():
-    username = request.form['username']
-    password_hash = hashlib.sha512(request.form['password'].encode('utf-8')).hexdigest()
+    if all(query in request.form.keys() for query in ['username', 'password']):
+        username = request.form['username']
+        password_hash = request.form['password']
+        if database.register_user(username, password_hash):
+            return "Created", 201
+        else:
+            return "Failed", 400
+    return "Failed", 406
+
 
 @app.route("/login", methods=['POST'])
 def login():
-    request.form
+    if all(query in request.form.keys() for query in ['username', 'password']):
+        attempt = database.login(request.form['username'], request.form['password'])
+        return attempt
+    return "Failed to log in", 403
 
 @app.route("/")
 def index():
