@@ -9,3 +9,40 @@ div.searchbox {
     padding-left: 20px;
     padding-right: 20px;
 }
+
+div.page {
+    padding-top: 50px;
+}
+
+.package-item-title {
+    height: 2.4em;
+    line-height: 1.2em;
+    overflow: hidden;
+    float: left;
+    width: calc(100% - 50px);
+    position: relative;
+    text-align: justify;
+    margin-right: -1em;
+    padding-right: 1em;
+}
+
+.package-item-title:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.package-item-title:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: white;
+}
+
+.package-item-delete {
+    float: right;
+}
