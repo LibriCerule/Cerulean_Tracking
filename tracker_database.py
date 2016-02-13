@@ -156,10 +156,15 @@ class TrackerDatabase(object):
                               code - we assume the password has already been
                               hashed prior to being sent here
 
+        :return: whether it successfully registered a user
         """
+        self.cursor.execute("select * from Users where username=?", (username,))
+        if (len(self.cursor.fetchone()) != 0):
+            return False
 
-        self.cursor.execute("insert or ignore into Users values (?,?,?,?)", (username, password_hash, " ", 0))
+        self.cursor.execute("insert into Users values (?,?,?,?)", (username, password_hash, " ", 0))
         self.connection.commit()
+        return True
 
     def log_in(self, username, password_hash):
         """ Verifies that a user's credentials are correct (actually exist)
