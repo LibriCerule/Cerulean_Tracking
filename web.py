@@ -22,6 +22,12 @@ def package_get():
     package = database.get_package(uuid)
     return "{\"uuid\":%s, \"name\":%s, \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package)
 
+@app.route("/registerpackagetouser", methods=['POST'])
+def register_package_to_user():
+    uuid = request.form['uuid']
+    username = request.form['username']
+    database.register_package_to_user(username, uuid)
+    return "Created", 201
 
 @app.route("/packagetrackupdate/<uuid>", methods=['POST'])
 def package_track_update(uuid):
