@@ -196,3 +196,25 @@ class TrackerDatabase(object):
 
         self.cursor.execute("update Users set num_packages=?, registered_packages=? where username=?", (num_packages, registered_packages, username))
         self.connection.commit()
+
+    def get_package_of_user(self, username):
+        """ Retrieves all packages registered to a user. 
+        """
+        if username == "admin":
+            self.cursor.execute("select * from Packages")
+            return self.cursor.fetchall()
+        else:
+            self.cursor.execute("select registered_packages from Users where username=?", (username,))
+            query = self.cursor.fetchone()
+            registered_packages = query[0].split(",")
+            packages = []
+
+            for rowid in registered_packages:
+                self.cursor.execute("select * from Packages where ROWID=?",(rowid,))
+                packages.append(self.cursor.fetchone())
+            return packages
+
+
+
+
+
