@@ -1,4 +1,27 @@
-function loadList() {
+function loadList(uuids) {
+    var packages = [];
+
+    for(var i = 0; i < uuids.length; i++) {
+        $.getJSON("/package?uuid=" + uuids[i]).error(function(xhr) {
+            packages.push($.parseJSON(xhr.responseText));
+        });
+    }
+
+    var html = '<div class="list-group vfill">';
+    for(var i = 0; i < packages.length; i++) {
+        html += '<a href="#" class="list-group-item clearfix">'
+                  + '<div class="package-item-title">' + packages[i].name + ' at ' + packages[i].lat + ', ' + packages[i].lon + '</div>'
+            + '<div class="pull-right package-item-delete">'
+                + '<button class="confirm-delete btn btn-md btn-error" id="hello" role="button" data-id="1">'
+                    + '<span class="glyphicon glyphicon-trash"></span>'
+                + '</button>'
+            + '</div>'
+        + '</a>'
+    }
+    html += '</div>';
+
+    $('#sidebar').append(html);
+
         // Temporary sidebar appends (TESTING ONLY)
         $('#sidebar').append('<div class="list-group vfill">'
         + '<a href="#" class="list-group-item clearfix">'
@@ -62,7 +85,7 @@ $(document).ready(function() {
     $(document.body).on('click', '#backOverview', function() {
         $('#sideNavHeader').children()[0].remove();
         searchNavHeader();
-        loadList();
+        loadList(['de305d54-75b4-431b-adb2-eb6b9e546010']);
     });
 
     $(document.body).on('click', '#sidebar .list-group-item', function() {
@@ -70,5 +93,6 @@ $(document).ready(function() {
         itemNavHeader();
         $('#sidebar').children()[0].remove();
     });
-    loadList();
+
+    loadList(['de305d54-75b4-431b-adb2-eb6b9e546010']);
 });
