@@ -22,6 +22,12 @@ def package_get():
     package = database.get_package(uuid)
     return "{\"uuid\":%s, \"name\":%s, \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package)
 
+@app.route("/registerpackagetouser", methods=['POST'])
+def register_package_to_user():
+    uuid = request.form['uuid']
+    username = request.form['username']
+    database.register_package_to_user(username, uuid)
+    return "Created", 201
 
 @app.route("/packagetrackupdate/<uuid>", methods=['POST'])
 def package_track_update(uuid):
@@ -56,12 +62,22 @@ def track_new_package():
 
 @app.route("/register", methods=['POST'])
 def register():
-    username = request.form['username']
-    password_hash = hashlib.sha512(request.form['password'].encode('utf-8')).hexdigest()
+    if all(query in request.form.keys() for query in ['username', 'password']):
+        username = request.form['username']
+        password_hash = request.form['password']
+        if database.register_user(username, password_hash):
+            return "Created", 201
+        else:
+            return "Failed", 400
+    return "Failed", 406
+
 
 @app.route("/login", methods=['POST'])
 def login():
-    request.form
+    if all(query in request.form.keys() for query in ['username', 'password']):
+        attempt = database.login(request.form['username'], request.form['password'])
+        return attempt
+    reutrn "Failed to log in" 403
 
 @app.route("/")
 def index():
