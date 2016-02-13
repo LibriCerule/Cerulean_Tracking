@@ -9,14 +9,21 @@ from tracker_database import TrackerDatabase
 #from directions import Directions
 
 app = Flask(__name__)
-app.debug=True
+#app.debug=True
 #app.run(host='0.0.0.0')
 database = TrackerDatabase("package.db")
-#directions = Directions("gmapskey")
+directions = Directions("gmapskey")
 
-#@app.route("/calculatedistancetime", methods=['GET'])
-#def calculate_distance_time():
-#    pass
+@app.route("/calculatedistancetime", methods=['GET'])
+def calculate_distance_time():
+    uuid = request.args.get('uuid')
+    destinfo = database.get_package(uuid)
+    currentinfo = database.get_package_updates(uuid)
+    if len(currentinfo) <= 0:
+        return "None"
+
+    return "{" + ",".join(directions.getData((destinfo[2], destinfo[3]),(currentinfo[-1][1], currentinfo[-1][2]))) + "}"
+
 
 @app.route("/getpackageofuser", methods=['GET'])
 def get_package_of_user():
