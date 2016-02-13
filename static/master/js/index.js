@@ -2,11 +2,27 @@ $(document).ready(function() {
     $('#sidebar').append('<a href="#" class="list-group-item clearfix">'
   + '<div class="package-item-title">Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym.</div>'
   + '<div class="pull-right package-item-delete">'
-      + '<button class="btn btn-md btn-error" role="button" data-title="item-1 data-id="1">'
+      + '<button class="confirm-delete btn btn-md btn-error" id="hello" role="button" data-id="1">'
           + '<span class="glyphicon glyphicon-trash"></span>'
       + '</button>'
   + '</div>'
   + '</a>');
+
+  $('.confirm-delete').on('click', function(e) {
+      e.preventDefault();
+      var id = $(this).data('id');
+      $('#delConfModal').data('id', id).modal('show');
+  });
+
+  $('#deleteYes').click(function() {
+      var id = $('#delConfModal').data('id');
+      $('[data-id=' + id + ']').parent().parent().remove();
+      $('#delConfModal').modal('hide');
+  });
+
+  $('#delConfModal').on('show', function() {
+ var id=$(this).data('id');document.write(id);
+});
 });
 
 /*
