@@ -64,7 +64,7 @@ def track_new_package():
     longitude = request.args.get('destinationLon')
 
     database.track_new_package(name, uuid, latitude, longitude)
-    return "{\"ackUUID\":\"%s\"" %(name)
+    return "{\"ackUUID\":\"%s\"}" %(name)
 
 @app.route("/register", methods=['POST'])
 def register():
