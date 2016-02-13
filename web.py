@@ -67,7 +67,10 @@ def register():
 
 @app.route("/login", methods=['POST'])
 def login():
-    request.form
+    if all(query in request.form.keys() for query in ['username', 'password']):
+        attempt = database.login(request.form['username'], request.form['password_hash'])
+        return attempt
+    reutrn "Failed to log in" 403
 
 @app.route("/")
 def index():
