@@ -1,6 +1,6 @@
 function loadList() {
         // Temporary sidebar appends (TESTING ONLY)
-        $('#sidebar').append('<div class="list-group vfill" style="background-color:blue;">'
+        $('#sidebar').append('<div class="list-group vfill">'
         + '<a href="#" class="list-group-item clearfix">'
             + '<div class="package-item-title">Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym.</div>'
             + '<div class="pull-right package-item-delete">'
@@ -72,7 +72,3 @@ $(document).ready(function() {
     });
     loadList();
 });
-
-/*
- Spopularyzował się w latach 60. XX w. wraz z publikacją arkuszy Letrasetu, zawierających fragmenty Lorem Ipsum, a ostatnio z zawierającym różne wersje Lorem Ipsum oprogramowaniem przeznaczonym do realizacji druków na komputerach osobistych, jak Aldus PageMaker
-*/
