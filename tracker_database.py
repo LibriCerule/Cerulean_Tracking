@@ -166,7 +166,7 @@ class TrackerDatabase(object):
         self.connection.commit()
         return True
 
-    def log_in(self, username, password_hash):
+    def login(self, username, password_hash):
         """ Verifies that a user's credentials are correct (actually exist)
 
         :return: True if the credentials are correct, False otherwise

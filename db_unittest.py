@@ -17,12 +17,16 @@ def test_track_new_package():
     testdb.package_track_update(test_uuid, test_lat, test_lon, test_time)
     testdb.package_track_update(test_uuid2, test_lat, test_lon, test_time)
 
-    testdb.package_track_update(test_uuid, True)
+    testdb.package_track_update(test_uuid, False)
 
 
     a = testdb.get_package(test_uuid)
     b = testdb.get_package_updates(test_uuid)
-    print(a)
+    print(b)
+    print(",".join("{\"uuid\":%s, \"lat\":%s, \"lon\":%s, \"timestamp\":%s}" %(update[0], update[1], update[2], update[3]) for update in b))
+
+
+
     #print(b)
 
 def test_login():
@@ -35,7 +39,7 @@ def test_login():
     testdb.register_package_to_user("hee", test_uuid)
     testdb.register_package_to_user("hee", test_uuid2)
 
-    print(testdb.get_package_of_user("admin"))
+    #print(testdb.get_package_of_user("admin"))
 
 
 def main():
