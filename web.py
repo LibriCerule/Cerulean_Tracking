@@ -35,7 +35,7 @@ def get_package_of_user():
 def package_get():
     uuid = request.args.get('uuid')
     package = database.get_package(uuid)
-    return "{\"uuid\":%s, \"name\":%s, \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package[0], package[1], package[2], package[3], package[4])
+    return "{\"uuid\":\"%s\", \"name\":\"%s\", \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package[0], package[1], package[2], package[3], package[4])
 
 @app.route("/getpackageupdates", methods=['GET'])
 def get_package_updates():
