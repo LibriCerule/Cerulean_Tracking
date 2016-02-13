@@ -46,7 +46,7 @@
 """
 
 import sqlite3
-import time
+import hashlib
 
 class TrackerDatabase(object):
     def __init__(self, directory):
@@ -57,10 +57,11 @@ class TrackerDatabase(object):
         """
 
         self.connection = sqlite3.connect(directory)
-        self.curs = self.connection.cursor()
+        self.cursor = self.connection.cursor()
 
-        self.curs.execute("create table if not exists Packages (uuid varchar(60), destination varchar(255), latitude real, longitude real, delivered integer)")
-        self.curs.execute("create table if not exists Updates (uuid varchar(60), latitude real, longitude real, timestamp varchar(255))")
+        self.cursor.execute("create table if not exists Users (username varchar(255), password_hash varchar(255), registered_packages varchar(255), num_packages int, UNIQUE(username))")
+        self.cursor.execute("create table if not exists Packages (uuid varchar(60), name varchar(255), latitude real, longitude real, delivered int, UNIQUE(uuid))")
+        self.cursor.execute("create table if not exists Updates (uuid varchar(60), latitude real, longitude real, timestamp varchar(255))")
 
     def package_track_update(self, uuid, *args):
         """ Creates a new entry in the package tracker updates table. There is 
@@ -85,19 +86,19 @@ class TrackerDatabase(object):
             delivered = args[0]
             if str(delivered) == "True":
                 delivered = 1
-                self.curs.execute("delete from Updates where uuid = ?", (uuid,))
+                self.cursor.execute("delete from Updates where uuid = ?", (uuid,))
             elif str(delivered) == "False":
                 delivered = 0
             else:
                 raise ValueError("Delivered must be True or False")
 
-            self.curs.execute("update Packages set delivered=? where uuid=?", (delivered, uuid))
+            self.cursor.execute("update Packages set delivered=? where uuid=?", (delivered, uuid))
 
         elif len(args) == 3:
             lat = args[0]
             lon = args[1]
             time = args[2]
-            self.curs.execute("insert into Updates values (?,?,?,?)", (uuid, lat, lon, time))
+            self.cursor.execute("insert into Updates values (?,?,?,?)", (uuid, lat, lon, time))
 
         self.connection.commit()
 
@@ -111,7 +112,7 @@ class TrackerDatabase(object):
         """
 
 
-        self.curs.execute("insert into Packages values (?,?,?,?,?)", (uuid, name, lat, lon,  0))
+        self.cursor.execute("insert or ignore into Packages values (?,?,?,?,?)", (uuid, name, lat, lon,  0))
         self.connection.commit()
 
     def get_package(self, uuid):
@@ -119,8 +120,8 @@ class TrackerDatabase(object):
         :return: Tuple in the format of (uuid, name, lat, lon, delivered)
         """
 
-        self.curs.execute("select * from Packages where uuid = ?", (uuid,))
-        return self.curs.fetchone()
+        self.cursor.execute("select * from Packages where uuid = ?", (uuid,))
+        return self.cursor.fetchone()
 
     def get_package_updates(self, uuid):
         """
@@ -130,5 +131,27 @@ class TrackerDatabase(object):
         :return: 
         """
 
-        self.curs.execute("select * from Updates where uuid = ?", (uuid,))
-        return self.curs.fetchall()
+        self.cursor.execute("select * from Updates where uuid = ?", (uuid,))
+        return self.cursor.fetchall()
+
+    def register_user(self, username, password_hash):
+        """
+        """
+        self.cursor.execute("insert into Users values (?,?,?,?)", (username, password_hash, " ", 0))
+
+    def log_in(self, username, password_hash):
+        self.cursor.execute("select * from Users where username=? and password_hash=?", (username,password_hash))
+        return len(self.cursor.fetchall()) == 1
+
+    def register_package_to_user(self, username, uuid):
+        self.cursor.execute("select ROWID from Packages where uuid=?" (uuid,))
+        new_row_id = self.cursor.fetchone()
+
+        # SQLite doesn't have real lists, so we're using makeshift lists
+        self.cursor.execute("select registered_packages from Users where username=?", (username,))
+        old_registered_packages = self.cursor.fetchone()
+        if old_registered_packages == " ":
+            old_registered_packages = new_row_id
+        else:
+            old_registered_packages += "," + new_row_id
+
