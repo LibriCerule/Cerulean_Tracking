@@ -8,7 +8,7 @@
 
     The database scheme is as follows:
 
-        Packages Table:
+        Packages Table - Contains user information
           ______________________________________________________________
           | UUID | Name | Latitude | Longitude | Timestamp | Delivered |
           --------------------------------------------------------------
@@ -21,7 +21,7 @@
           Delivered - Integer value of 1 if the package has been delivered already, 
                       otherwise 0
         
-        Updates Table:
+        Updates Table - Contains all package updates
           ___________________________________________
           | UUID | Latitude | Longitude | Timestamp |
           -------------------------------------------
@@ -32,6 +32,20 @@
           Longitude - The longitude of the package
           Timestamp - Starting time of the package
 
+       Users table - Contains user information
+          _________________________________________________________________
+          | username | password_hash | registered_packages | num_packages |
+          -----------------------------------------------------------------
+
+          Username - The username
+          password_hash - Hashed password. We don't perform any crypto on
+                          this end: we rely on it to have already been 
+                          hashed
+          registered_packages - A comma seperated list of rowIDs of
+                                packages registered to a user. We use 
+                                rowIDs instead of uuids as those are
+                                too long
+          num_packages - A count of how many user-registered packages
 
     Example usage of the class:
 
@@ -46,7 +60,6 @@
 """
 
 import sqlite3
-import hashlib
 
 class TrackerDatabase(object):
     def __init__(self, directory):
@@ -116,7 +129,8 @@ class TrackerDatabase(object):
         self.connection.commit()
 
     def get_package(self, uuid):
-        """ 
+        """ Gets package by UUID.
+
         :return: Tuple in the format of (uuid, name, lat, lon, delivered)
         """
 
@@ -124,27 +138,44 @@ class TrackerDatabase(object):
         return self.cursor.fetchone()
 
     def get_package_updates(self, uuid):
-        """
+        """ Gets the list of package updates for a specific package.
 
         :param uuid: Package uuid
 
-        :return: 
+        :return: List of tuples of each package update
         """
 
         self.cursor.execute("select * from Updates where uuid = ?", (uuid,))
         return self.cursor.fetchall()
 
     def register_user(self, username, password_hash):
+        """ Registers a new user.
+
+        :param username: The... username. 
+        :param password_hash: No crypto is being done on this portion of the 
+                              code - we assume the password has already been
+                              hashed prior to being sent here
+
         """
-        """
+
         self.cursor.execute("insert or ignore into Users values (?,?,?,?)", (username, password_hash, " ", 0))
         self.connection.commit()
 
     def log_in(self, username, password_hash):
+        """ Verifies that a user's credentials are correct (actually exist)
+
+        :return: True if the credentials are correct, False otherwise
+        """
         self.cursor.execute("select * from Users where username=? and password_hash=?", (username,password_hash))
         return len(self.cursor.fetchall()) == 1
 
     def register_package_to_user(self, username, uuid):
+        """ Registers a package to the user.
+
+        :param username: Username
+        :param uuid: UUID of the package
+        """
+
         self.cursor.execute("select ROWID from Packages where uuid=?", (uuid,))
         new_row_id = int(self.cursor.fetchone()[0])
 
@@ -158,7 +189,7 @@ class TrackerDatabase(object):
             registered_packages = new_row_id
             num_packages += 1
         else:
-            # FIXME: May want to throw an exception if it tries to add a duplicate package
+            # Doesn't add duplicate packages
             if not str(new_row_id) in registered_packages.split(","):
                 registered_packages += "," + str(new_row_id)
                 num_packages += 1
