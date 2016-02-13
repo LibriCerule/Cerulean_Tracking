@@ -18,7 +18,7 @@ def package_get():
     package = database.get_package(uuid)
     return "{\"uuid\":%s, \"name\":%s, \"lat\":%s, \"lon\":%s, \"delivered\":%s}" %(package)
 
-@app.route("/getpackageupdates", method=['GET'])
+@app.route("/getpackageupdates", methods=['GET'])
 def get_package_updates():
     uuid = request.values.getlist('uuid')
     package = database.get_package_updates(uuid)
@@ -83,7 +83,7 @@ def login():
     if all(query in request.form.keys() for query in ['username', 'password']):
         attempt = database.login(request.form['username'], request.form['password'])
         return attempt
-    reutrn "Failed to log in" 403
+    return "Failed to log in", 403
 
 @app.route("/")
 def index():
